@@ -1,6 +1,7 @@
- package com.pkware.foodapp.dao;
+package com.pkware.foodapp.dao;
 
 import java.util.List;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,24 +10,20 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.pkware.foodapp.entity.Category;
 import com.pkware.foodapp.entity.Customer;
 
 @Repository
-public class CategoryDao{
-	
+public class CustomerDao {
+
 	@Autowired
 	private SessionFactory factory;
-	 
-	 
-	public Category save(Category category) {
+	
+	public Customer save(Customer customer) {
 		Session s=factory.openSession();
 		Transaction tx=null;
-		Category c=null;
 		try {
 			tx=s.beginTransaction();
-			c=new Category(category.getCategoryName());
-			s.save(c);
+			s.save(customer);
 			tx.commit();
 		}
 		catch(Exception e) {
@@ -37,16 +34,17 @@ public class CategoryDao{
 		finally {
 			s.close();
 		}
-		return c;
+		
+		return customer;
 	}
-	
-	public List<Category> findAll(){
+
+	public List<Customer> getAllCustomer() {
 		Session s=factory.openSession();
 		Transaction tx=null;
-		List<Category> categories = null;
+		List<Customer> customers=null;
 		try {
 			tx = s.beginTransaction();
-			categories = s.createQuery("from Category").list();
+			customers = s.createQuery("from Customer").list();
 			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)
@@ -55,18 +53,16 @@ public class CategoryDao{
 		} finally {
 			s.close();
 		}
-		return categories;
+		return customers;
 	}
 
-	public Category findById(String c) {
+	public Customer findById(Integer id) {
 		Session session = factory.openSession();
 		Transaction tx = null;
-		Category category=null;
+		Customer customer=null;
 		try {
 			tx = session.beginTransaction();
-			Query query=session.createQuery("from Category where categoryName=:x");
-			query.setParameter("x", c);
-			category= (Category) query.getSingleResult();
+			customer = (Customer) session.get(Customer.class, id);
 			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)
@@ -75,17 +71,16 @@ public class CategoryDao{
 		} finally {
 			session.close();
 		}
-		return category;
+		return customer;
 	}
 
-	public void deleteById(String c) {
+	public void deleteById(Integer id) {
 		Session session = factory.openSession();
 		Transaction tx = null;
-		Category category=null;
 		try {
 			tx = session.beginTransaction();
-			Query query=session.createQuery("delete from Category where categoryName=:x");
-			query.setParameter("x", c);
+			Query query=session.createQuery("delete from Customer where customerId=:x");
+			query.setParameter("x", id);
 			query.executeUpdate();
 			tx.commit();
 		} catch (HibernateException e) {
@@ -97,14 +92,18 @@ public class CategoryDao{
 		}
 	}
 
-	public Category update(Category category) {
+	public Customer update(Customer customer) {
 		Session session = factory.openSession();
 		Transaction tx = null;
-		int id=category.getCategoryId();
+		int id=customer.getCustomerId();
 		try {
 			tx = session.beginTransaction();
-			Category c = (Category) session.get(Category.class, id);
-			c.setCategoryName(category.getCategoryName());
+			Customer c = this.findById(id);
+			c.setCustomerAddress(customer.getCustomerAddress());
+			c.setCustomerMail(customer.getCustomerMail());
+			c.setCustomerName(customer.getCustomerName());
+			c.setCustomerPhone(customer.getCustomerPhone());
+			
 			session.update(c);
 			tx.commit();
 		} catch (HibernateException e) {
@@ -114,6 +113,7 @@ public class CategoryDao{
 		} finally {
 			session.close();
 		}
-		return category;
-	}	
+		return customer;
+	}
+
 }

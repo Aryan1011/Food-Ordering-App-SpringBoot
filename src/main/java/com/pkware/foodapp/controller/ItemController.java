@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pkware.foodapp.entity.Item;
+import com.pkware.foodapp.requestObject.ItemRequest;
 import com.pkware.foodapp.services.ItemService;
 
 @RestController
@@ -23,19 +24,20 @@ public class ItemController {
 	private ItemService itemService;
 	
 	@PostMapping({"/add"})
-	public Item addItem(@RequestBody Item item) {
-		return this.itemService.addItem(item);
+	public Item addItem(@RequestBody ItemRequest itemRequest) {
+		return this.itemService.addItem(itemRequest);
 	}
 	
 	@PutMapping({"/update"})
-	public Item updateItem(@RequestBody Item item) {
-		return this.itemService.updateItem(item);
+	public Item updateItem(@RequestBody ItemRequest itemRequest) {
+		return this.itemService.updateItem(itemRequest);
 	}
 	
 	@GetMapping({"/get/{id}"})
 	public Item getItem(@PathVariable String id) {
 		return this.itemService.getItem((int) Integer.parseInt(id));
 	}
+	
 	
 	@GetMapping({"/get"})
 	public List<Item> getAllItem() {

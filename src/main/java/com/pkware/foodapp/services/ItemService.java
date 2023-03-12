@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.pkware.foodapp.dao.ItemDao;
 import com.pkware.foodapp.entity.Item;
+import com.pkware.foodapp.requestObject.ItemRequest;
 
 @Service
 public class ItemService {
@@ -14,12 +15,12 @@ public class ItemService {
 	@Autowired
 	private ItemDao itemDao;
 	
-	public Item addItem(Item item) {
-		return itemDao.save(item);
+	public Item addItem(ItemRequest itemRequest) {
+		return itemDao.save(itemRequest);
 	}
 
-	public Item updateItem(Item item) {
-		return itemDao.save(item);
+	public Item updateItem(ItemRequest itemRequest) {
+		return itemDao.update(itemRequest);
 	}
 
 	public Item getItem(int parseInt) {

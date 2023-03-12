@@ -11,47 +11,44 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.pkware.foodapp.entity.Category;
-import com.pkware.foodapp.services.CategoryService;
+import com.pkware.foodapp.entity.Customer;
+import com.pkware.foodapp.services.CustomerService;
 
 @RestController
-@RequestMapping({"/category"})
-public class CategoryController {
-
+@RequestMapping({"/customer"})
+public class CustomerController {
+	
 	@Autowired
-	private CategoryService categoryService;
+	CustomerService customerService;
 	
 	@GetMapping({"/test"})
 	public String test() {
-		return "Working Category";
+		return "Working Customer";
 	}
-	
+
 	@PostMapping({"/add"})
-	public Category addCategory(@RequestBody Category category) {
-		return this.categoryService.addCategory(category);
+	public Customer addCustomer(@RequestBody Customer customer) {
+		return this.customerService.addCategory(customer);
 	}
 	
 	@GetMapping({"/get"})
-	public List<Category> getAllCategory(){
-		return this.categoryService.getAllCategory();
+	public List<Customer> getAllCustomer(){
+		return this.customerService.getAllCustomer();
 	}
 	
 	@GetMapping({"/get/{id}"})
-	public Category getCategory(@PathVariable String id) {
-		return this.categoryService.getCategory(id);
+	public Customer getCustomer(@PathVariable String id) {
+		return this.customerService.getCustomer(Integer.parseInt(id));
 	}
 	
 	@DeleteMapping({"/delete/{id}"})
-	public Category deleteCategory(@PathVariable String id) {
-		return this.categoryService.deleteCategory(id);
+	public Customer deleteCustomer(@PathVariable String id) {
+		return this.customerService.deleteCustomer(Integer.parseInt(id));
 	}
 	
 	@PutMapping({"/update"})
-	public Category updateCategory(@RequestBody Category category) {
-		return this.categoryService.updateCategory(category);
+	public Customer updateCustomer(@RequestBody Customer customer) {
+		return this.customerService.updateCustomer(customer);
 	}
-	
-	
+
 }
- 

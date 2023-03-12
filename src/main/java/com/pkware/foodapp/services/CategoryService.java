@@ -14,7 +14,7 @@ public class CategoryService {
 	@Autowired
 	CategoryDao categoryDao;
 
-	public Object addCategory(Category category) {
+	public Category addCategory(Category category) {
 		return categoryDao.save(category);
 	}
 
@@ -22,19 +22,19 @@ public class CategoryService {
 		return (List<Category>) categoryDao.findAll();
 	}
 
-	public Category getCategory(int parseInt) {
-		Category category = categoryDao.findById(new Integer(parseInt));
-		return category;
+	public Category getCategory(String category) {
+		Category c = categoryDao.findById(category);
+		return c;
 	}
 
-	public Category deleteCategory(int parseInt) {
-		Category category = categoryDao.findById(new Integer(parseInt));
-		categoryDao.deleteById(new Integer(parseInt));
-		return category;
+	public Category deleteCategory(String category) {
+		Category c = categoryDao.findById(category);
+		categoryDao.deleteById(category);
+		return c;
 	}
 
-	public Object updateCategory(Category category) {
-		return categoryDao.save(category);
+	public Category updateCategory(Category category) {
+		return categoryDao.update(category);
 	}
 
 }
