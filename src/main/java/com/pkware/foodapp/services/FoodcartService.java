@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.pkware.foodapp.dao.FoodcartDao;
 import com.pkware.foodapp.entity.FoodCart;
 import com.pkware.foodapp.entity.Item;
+import com.pkware.foodapp.entity.OrderItem;
 import com.pkware.foodapp.requestObject.ItemToCartRequest;
 
 @Service
@@ -22,7 +23,7 @@ public class FoodcartService {
 	}
 	
 //  items from cart id
-	public List<Item> getCartItems(int parseInt) {
+	public List<OrderItem> getCartItems(int parseInt) {
 		return this.foodcartDao.listItems(parseInt);
 	}
 

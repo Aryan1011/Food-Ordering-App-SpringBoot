@@ -14,54 +14,55 @@ import javax.persistence.OneToOne;
 @Entity
 public class FoodCart {
 
-	@Override
-	public String toString() {
-		return "FoodCart [cartId=" + cartId + ", items=" + items + ", customerMail=" + customerMail + ", customer="
-				+ customer + "]";
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int cartId;
 	
-	public FoodCart() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public FoodCart(List<Item> items, String customerMail, Customer customer) {
-		super();
-		this.items = items;
-		this.customerMail = customerMail;
-		this.customer = customer;
-	}
 
 	@OneToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
-	private List<Item> items;
+	private List<OrderItem> orderItems;
 	
-	public void addToList(Item item) {
-		List<Item> a = this.getItems();
-		a.add(item);
-		this.setItems(a);
+	public void addToList(OrderItem orderItem) {
+		List<OrderItem> a = this.getOrderItems();
+		a.add(orderItem);
+		this.setOrderItems(a);
 	}
 	
-	public void removeFromCart(Item item) {
-		List<Item> a = this.getItems();
-		a.remove(item);
-		this.setItems(a);
-	}
 	
 	public String getCustomerMail() {
 		return customerMail;
 	}
 
 
-	public List<Item> getItems() {
-		return items;
+	
+
+	public FoodCart() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
-	public void setItems(List<Item> items) {
-		this.items = items;
+
+	public FoodCart(List<OrderItem> orderItems, String customerMail, Customer customer) {
+		super();
+		this.orderItems = orderItems;
+		this.customerMail = customerMail;
+		this.customer = customer;
+	}
+
+
+	@Override
+	public String toString() {
+		return "FoodCart [cartId=" + cartId + ", orderItems=" + orderItems + ", customerMail=" + customerMail
+				+ ", customer=" + customer + "]";
+	}
+
+
+	public List<OrderItem> getOrderItems() {
+		return orderItems;
+	}
+
+	public void setOrderItems(List<OrderItem> orderItems) {
+		this.orderItems = orderItems;
 	}
 
 	public void setCustomerMail(String customerMail) {

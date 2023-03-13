@@ -22,7 +22,6 @@ public class OrderDetails {
 	
 	public OrderDetails() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public OrderDetails(Date date,  String orderComment, String customerMail) {
 		super();

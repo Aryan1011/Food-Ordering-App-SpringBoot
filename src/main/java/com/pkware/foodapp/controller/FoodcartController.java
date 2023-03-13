@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pkware.foodapp.entity.FoodCart;
 import com.pkware.foodapp.entity.Item;
+import com.pkware.foodapp.entity.OrderItem;
 import com.pkware.foodapp.requestObject.ItemToCartRequest;
 import com.pkware.foodapp.services.FoodcartService;
 
@@ -35,7 +36,7 @@ public class FoodcartController {
 	
 	//items from cart id
 	@GetMapping({"/getcartitems/{id}"})
-	public List<Item> getCartItems(@PathVariable String id) {
+	public List<OrderItem> getCartItems(@PathVariable String id) {
 		return this.foodcartService.getCartItems(Integer.parseInt(id));
 	}
 	
@@ -45,14 +46,14 @@ public class FoodcartController {
 		return this.foodcartService.addItemToCart(cartRequest);
 	}
 	
-//	deletes whole cart
+//	deletes whole cart from cart id
 	@GetMapping({"/deletecart/{id}"})
 	public int deleteCart(@PathVariable String id) {
 		return this.foodcartService.deleteCart(Integer.parseInt(id));
 	}
 	
 	//getting total from cart id
-	@GetMapping({"/getTotal/{id}"})
+	@GetMapping({"/gettotal/{id}"})
 	public int getTotalAmount(@PathVariable String id) {
 		return this.foodcartService.getTotalAmount(Integer.parseInt(id));
 	}

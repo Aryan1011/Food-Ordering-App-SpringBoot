@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import com.pkware.foodapp.entity.Customer;
 import com.pkware.foodapp.entity.FoodCart;
 import com.pkware.foodapp.entity.Item;
+import com.pkware.foodapp.entity.OrderItem;
 import com.pkware.foodapp.requestObject.ItemToCartRequest;
 
 @Repository
@@ -25,6 +26,9 @@ public class FoodcartDao {
 	 
 	 @Autowired
 	 private ItemDao itemDao;
+	 
+	 @Autowired
+	 private OrderItemDao orderItemDao;
 	
 //	cart by cartid
 	public FoodCart findById(int parseInt) {
@@ -48,14 +52,14 @@ public class FoodcartDao {
 		return foodCart;
 	}
 //  Item List by cart id
-	public List<Item> listItems(int parseInt) {
+	public List<OrderItem> listItems(int parseInt) {
 		Session session = factory.openSession();
 		Transaction tx = null;
-		List<Item> items=null;
+		List<OrderItem> items=null;
 		try {
 			tx = session.beginTransaction();
 			FoodCart foodCart=(FoodCart) session.get(FoodCart.class, parseInt);
-			items= foodCart.getItems();
+			items= foodCart.getOrderItems();
 			tx.commit();
 		}
 		catch (HibernateException e) {
@@ -81,7 +85,9 @@ public class FoodcartDao {
 			session = factory.openSession();
 			tx = session.beginTransaction();
 			FoodCart foodCart=session.get(FoodCart.class, cartId);
-			foodCart.addToList(item);
+			OrderItem oi= orderItemDao.addItem(cartRequest);
+			foodCart.addToList(oi);
+			
 			tx.commit();
 		}
 		catch (HibernateException e) {
@@ -101,7 +107,13 @@ public class FoodcartDao {
 			session = factory.openSession();
 			tx = session.beginTransaction();
 			FoodCart foodCart=session.get(FoodCart.class, cartId);
+			String mail = foodCart.getCustomerMail();
 			session.delete(foodCart);
+			tx.commit();
+			tx = session.beginTransaction();
+			Query q = session.createQuery("delete from OrderItem where customerMail=:x");
+			q.setParameter("x", mail);
+			q.executeUpdate();
 			tx.commit();
 		}
 		catch (HibernateException e) {
@@ -121,9 +133,9 @@ public class FoodcartDao {
 		try {
 			tx = session.beginTransaction();
 			FoodCart foodCart=(FoodCart) session.get(FoodCart.class, parseInt);
-			List<Item>  items= foodCart.getItems();
-			for(Item i:items) {
-				total += i.getItemCost();
+			List<OrderItem>  items= foodCart.getOrderItems();
+			for(OrderItem i:items) {
+				total += i.getQuantity() * i.getItem().getItemCost() ;
 			}
 			tx.commit();
 		}
@@ -151,7 +163,7 @@ public class FoodcartDao {
 			query.setParameter("x", mail);
 			foodCart=(FoodCart)query.uniqueResult();
 			if(foodCart==null) {
-				List<Item> is = new ArrayList<>();
+				List<OrderItem> is = new ArrayList<OrderItem>();
 				foodCart=new FoodCart(is,mail,cus);
 				session.save(foodCart);
 			}

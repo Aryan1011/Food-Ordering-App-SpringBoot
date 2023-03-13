@@ -15,6 +15,7 @@ import com.pkware.foodapp.entity.Customer;
 import com.pkware.foodapp.entity.FoodCart;
 import com.pkware.foodapp.entity.Item;
 import com.pkware.foodapp.entity.OrderDetails;
+import com.pkware.foodapp.entity.OrderItem;
 
 @Repository
 public class OrderDao {
@@ -27,6 +28,9 @@ public class OrderDao {
 	
 	@Autowired
 	private CustomerDao customerDao;
+	
+	@Autowired
+	private ItemDao itemDao;
 	
 	
 //	customerId
@@ -42,18 +46,22 @@ public class OrderDao {
 			FoodCart foodCart = foodcartDao.findById(cartId);
 			
 			String it="";
-			List<Item> items = foodCart.getItems();
-			for(Item item:items) {
-				it+=item.getItemName();
+			List<OrderItem> items = foodCart.getOrderItems();
+			for(OrderItem item:items) {
+				
+				it+=item.getItem().getItemName();
+				it+="(quantity-"+item.getQuantity()+")";
 				it+=", ";
 			}
 			int total = foodcartDao.getTotal(cartId);
-			String comment = foodCart.getCustomerMail()+ "Ordered "+it +"Worth Ruppees - " + total;
+			String comment = foodCart.getCustomerMail() + " Ordered "+it +"Worth Ruppees - " + total;
 			
 			details = new OrderDetails(new Date(),comment,foodCart.getCustomerMail());
 			session.save(details);
 			tx.commit();
+			tx=session.beginTransaction();
 			foodcartDao.deleteCart(cartId);
+			tx.commit();
 		}
 		catch(Exception e) {
 			if(tx!=null)
@@ -89,5 +97,4 @@ public class OrderDao {
 		}
 		return details;
 	}
-
 }

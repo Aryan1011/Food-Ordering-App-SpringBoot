@@ -3,14 +3,20 @@ package com.pkware.foodapp.requestObject;
 public class ItemToCartRequest {
 	private int customerId;
 	private int itemId;
+	private int itemQuantity;
 	
+	public int getItemQuantity() {
+		return itemQuantity;
+	}
+
+	public void setItemQuantity(int itemQuantity) {
+		this.itemQuantity = itemQuantity;
+	}
+
 	public int getCustomerId() {
 		return customerId;
 	}
-	@Override
-	public String toString() {
-		return "ItemToCartRequest [customerId=" + customerId + ", itemId=" + itemId + "]";
-	}
+	
 	public void setCustomerId(int customerId) {
 		this.customerId = customerId;
 	}

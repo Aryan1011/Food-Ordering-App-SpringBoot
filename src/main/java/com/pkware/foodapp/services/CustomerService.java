@@ -39,7 +39,7 @@ public class CustomerService {
 	}
 
 	public Customer getByMail(String mail) {
-		return CustomerDao.getByMail(mail);
+		return customerDao.getByMail(mail);
 	}
 
 }
