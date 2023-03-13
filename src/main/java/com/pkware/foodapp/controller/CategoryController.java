@@ -27,26 +27,32 @@ public class CategoryController {
 		return "Working Category";
 	}
 	
+	
+	//saves by sending id(not used) and category Name
 	@PostMapping({"/add"})
 	public Category addCategory(@RequestBody Category category) {
 		return this.categoryService.addCategory(category);
 	}
 	
+	// get all categories
 	@GetMapping({"/get"})
 	public List<Category> getAllCategory(){
 		return this.categoryService.getAllCategory();
 	}
 	
+//	get full by passing category name
 	@GetMapping({"/get/{id}"})
 	public Category getCategory(@PathVariable String id) {
 		return this.categoryService.getCategory(id);
 	}
 	
+//	delete by category name
 	@DeleteMapping({"/delete/{id}"})
 	public Category deleteCategory(@PathVariable String id) {
 		return this.categoryService.deleteCategory(id);
 	}
 	
+//	Send full object to change category name 
 	@PutMapping({"/update"})
 	public Category updateCategory(@RequestBody Category category) {
 		return this.categoryService.updateCategory(category);

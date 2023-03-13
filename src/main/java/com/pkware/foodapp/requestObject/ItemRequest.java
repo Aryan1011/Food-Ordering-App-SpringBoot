@@ -4,6 +4,8 @@ public class ItemRequest {
 	
 	private String itemName;
 	private String itemDesc;
+	private int itemCost;
+	private String itemCategory;
 	public String getItemName() {
 		return itemName;
 	}
@@ -28,6 +30,4 @@ public class ItemRequest {
 	public void setItemCategory(String itemCategory) {
 		this.itemCategory = itemCategory;
 	}
-	private int itemCost;
-	private String itemCategory;
 }

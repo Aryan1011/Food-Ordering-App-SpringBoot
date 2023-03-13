@@ -38,4 +38,8 @@ public class CustomerService {
 		return customerDao.update(customer);
 	}
 
+	public Customer getByMail(String mail) {
+		return CustomerDao.getByMail(mail);
+	}
+
 }

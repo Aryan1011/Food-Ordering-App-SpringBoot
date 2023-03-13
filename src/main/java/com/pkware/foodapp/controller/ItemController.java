@@ -23,27 +23,31 @@ public class ItemController {
 	@Autowired
 	private ItemService itemService;
 	
+//	we send name, desc, cost and category name 
 	@PostMapping({"/add"})
 	public Item addItem(@RequestBody ItemRequest itemRequest) {
 		return this.itemService.addItem(itemRequest);
 	}
 	
+//	finds by item name and updates desc or cost sent in the object with name desc cost and category name
 	@PutMapping({"/update"})
 	public Item updateItem(@RequestBody ItemRequest itemRequest) {
 		return this.itemService.updateItem(itemRequest);
 	}
 	
+//	find by item id
 	@GetMapping({"/get/{id}"})
 	public Item getItem(@PathVariable String id) {
 		return this.itemService.getItem((int) Integer.parseInt(id));
 	}
 	
-	
+//	ordered by category id
 	@GetMapping({"/get"})
 	public List<Item> getAllItem() {
 		return this.itemService.getAllItem();
 	}
 	
+//	delete by item id
 	@DeleteMapping({"/delete/{id}"})
 	public Item deleteItem(@PathVariable String id) {
 		return this.itemService.deleteItem((int) Integer.parseInt(id));

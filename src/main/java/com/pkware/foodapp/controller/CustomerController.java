@@ -26,29 +26,41 @@ public class CustomerController {
 		return "Working Customer";
 	}
 
+//	add customer by customer object (id is not used) 
 	@PostMapping({"/add"})
 	public Customer addCustomer(@RequestBody Customer customer) {
 		return this.customerService.addCategory(customer);
 	}
 	
+//	gets all customer
 	@GetMapping({"/get"})
 	public List<Customer> getAllCustomer(){
 		return this.customerService.getAllCustomer();
 	}
 	
+//	gets customer by his id 
 	@GetMapping({"/get/{id}"})
 	public Customer getCustomer(@PathVariable String id) {
 		return this.customerService.getCustomer(Integer.parseInt(id));
 	}
 	
+//	delete by id
 	@DeleteMapping({"/delete/{id}"})
 	public Customer deleteCustomer(@PathVariable String id) {
 		return this.customerService.deleteCustomer(Integer.parseInt(id));
 	}
 	
+//	updates customer by id
 	@PutMapping({"/update"})
 	public Customer updateCustomer(@RequestBody Customer customer) {
 		return this.customerService.updateCustomer(customer);
+	
+	}
+	
+//	find by customer mail 
+	@GetMapping("/getbymail/{mail}")
+	public Customer getByMail(@PathVariable String mail) {
+		return this.customerService.getByMail(mail);
 	}
 
 }

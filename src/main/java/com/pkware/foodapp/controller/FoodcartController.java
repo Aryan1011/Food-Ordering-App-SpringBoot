@@ -39,12 +39,13 @@ public class FoodcartController {
 		return this.foodcartService.getCartItems(Integer.parseInt(id));
 	}
 	
-	
+//	send customer id and item id
 	@PostMapping({"/additemtocart"})
 	public int addItemToCart(@RequestBody ItemToCartRequest cartRequest) {
 		return this.foodcartService.addItemToCart(cartRequest);
 	}
 	
+//	deletes whole cart
 	@GetMapping({"/deletecart/{id}"})
 	public int deleteCart(@PathVariable String id) {
 		return this.foodcartService.deleteCart(Integer.parseInt(id));
@@ -55,8 +56,4 @@ public class FoodcartController {
 	public int getTotalAmount(@PathVariable String id) {
 		return this.foodcartService.getTotalAmount(Integer.parseInt(id));
 	}
-	
-	
-	
-	
 }

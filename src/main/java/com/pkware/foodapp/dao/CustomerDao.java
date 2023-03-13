@@ -116,4 +116,24 @@ public class CustomerDao {
 		return customer;
 	}
 
+	public Customer getByMail(String mail) {
+		Session session = factory.openSession();
+		Transaction tx = null;
+		Customer customer=null;
+		try {
+			tx = session.beginTransaction();
+			Query query=session.createQuery("from Customer where customerMail=:x");
+			query.setParameter("x", mail);
+			customer=(Customer) query.uniqueResult();
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return customer;
+	}
+
 }
