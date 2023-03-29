@@ -1,9 +1,9 @@
 package com.pkware.foodapp.dao;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -13,9 +13,10 @@ import org.springframework.stereotype.Repository;
 
 import com.pkware.foodapp.entity.Customer;
 import com.pkware.foodapp.entity.FoodCart;
-import com.pkware.foodapp.entity.Item;
 import com.pkware.foodapp.entity.OrderDetails;
 import com.pkware.foodapp.entity.OrderItem;
+import com.pkware.foodapp.requestObject.CartCreateRequest;
+import com.pkware.foodapp.requestObject.StatusChangeRequest;
 
 @Repository
 public class OrderDao {
@@ -29,38 +30,19 @@ public class OrderDao {
 	@Autowired
 	private CustomerDao customerDao;
 	
-	@Autowired
-	private ItemDao itemDao;
-	
-	
-//	customerId
-	public OrderDetails makeOrder(int customerId) {
+
+	// customer orders
+	public List<OrderDetails> getCustomerOrders(int customerId) {
 		Session session = null;
 		Transaction tx=null;
-		OrderDetails details=null;
+		List<OrderDetails> details=null;
 		try {
 			session = factory.openSession();
 			tx=session.beginTransaction();
-			
-			int cartId = foodcartDao.getCartId(customerId);
-			FoodCart foodCart = foodcartDao.findById(cartId);
-			
-			String it="";
-			List<OrderItem> items = foodCart.getOrderItems();
-			for(OrderItem item:items) {
-				
-				it+=item.getItem().getItemName();
-				it+="(quantity-"+item.getQuantity()+")";
-				it+=", ";
-			}
-			int total = foodcartDao.getTotal(cartId);
-			String comment = foodCart.getCustomerMail() + " Ordered "+it +"Worth Ruppees - " + total;
-			
-			details = new OrderDetails(new Date(),comment,foodCart.getCustomerMail());
-			session.save(details);
-			tx.commit();
-			tx=session.beginTransaction();
-			foodcartDao.deleteCart(cartId);
+			Customer customer=customerDao.findById(customerId);
+			Query q = session.createQuery("from OrderDetails where customerMail=:x");
+			q.setParameter("x", customer.getCustomerMail());
+			details= q.list();
 			tx.commit();
 		}
 		catch(Exception e) {
@@ -74,17 +56,96 @@ public class OrderDao {
 		return details;
 	}
 
-	public List<OrderDetails> getAllOrder(int customerId) {
+
+
+	public String changeOrderStatus(StatusChangeRequest statusChangeRequest) {
+		Session session = null;
+		Transaction tx=null;
+		try {
+			session = factory.openSession();
+			tx=session.beginTransaction();
+			OrderDetails orderDetails=session.get(OrderDetails.class, statusChangeRequest.getOrderId());
+			orderDetails.setStatus(statusChangeRequest.getOrderStatus());
+			tx.commit();
+		}
+		catch(Exception e) {
+			if(tx!=null)
+				tx.rollback();
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return statusChangeRequest.getOrderStatus();
+	}
+
+	//make order from cart
+	public OrderDetails makeOrder(String id) {
+		Session session = null;
+		Transaction tx=null;
+		OrderDetails details=null;
+		try {
+			session = factory.openSession();
+			tx=session.beginTransaction();
+			FoodCart foodCart= foodcartDao.findById(Integer.parseInt(id));
+			List<OrderItem> items = foodCart.getOrderItems();
+			String it="";
+			for(OrderItem item:items) {
+				
+				it+=item.getItem().getItemName();
+				it+="(quantity-"+item.getQuantity()+")";
+				it+=", ";
+			}
+			int total = foodCart.getCost();
+			String comment = foodCart.getCustomerMail() + " Ordered "+it +"Worth Ruppees - " + total;
+			Customer cus=customerDao.getByMail(foodCart.getCustomerMail());
+			details = new OrderDetails(comment,new Date(),foodCart,"Paid",foodCart.getCustomerMail());
+			session.save(details);
+			tx.commit();
+		}
+		catch(Exception e) {
+			if(tx!=null)
+				tx.rollback();
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return details;
+	}
+
+//	get by order id
+	public OrderDetails getOrderDetails(int parseInt) {
+		Session session = factory.openSession();
+		Transaction tx = null;
+		OrderDetails orderDetails = null;
+		try {
+			tx = session.beginTransaction();
+			Query query=session.createQuery("from OrderDetails where orderId=:x");
+			query.setParameter("x", parseInt);
+			orderDetails=(OrderDetails)query.uniqueResult();
+			tx.commit();
+		}
+		catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return orderDetails;
+	}
+
+	public List<OrderDetails> getAllFromStatus(String id) {
 		Session session = null;
 		Transaction tx=null;
 		List<OrderDetails> details=null;
 		try {
 			session = factory.openSession();
 			tx=session.beginTransaction();
-			Customer customer=customerDao.findById(customerId);
-			Query q = session.createQuery("from OrderDetails where customerMail=:x");
-			q.setParameter("x", customer.getCustomerMail());
-			details= q.list();
+			Query q = session.createQuery("from OrderDetails where status=:x");
+			q.setParameter("x", id);
+			details=q.list();
 			tx.commit();
 		}
 		catch(Exception e) {

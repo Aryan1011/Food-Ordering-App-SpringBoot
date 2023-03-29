@@ -11,19 +11,13 @@ public class Customer {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int customerId;
+	private int customerId;	
 	private String customerName;
 	@Column(nullable = false,unique = true)
+	private String customerPhone;
 	private String customerAddress;
 	@Column(nullable = false,unique = true)
 	private String customerMail;
-	private String customerPhone;
-	public int getCustomerId() {
-		return customerId;
-	}
-	public void setCustomerId(int customerId) {
-		this.customerId = customerId;
-	}
 	public String getCustomerName() {
 		return customerName;
 	}
@@ -48,6 +42,24 @@ public class Customer {
 	public void setCustomerMail(String customerMail) {
 		this.customerMail = customerMail;
 	}
+	public Customer() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public Customer(String customerName, String customerPhone, String customerAddress, String customerMail) {
+		super();
+		this.customerName = customerName;
+		this.customerPhone = customerPhone;
+		this.customerAddress = customerAddress;
+		this.customerMail = customerMail;
+	}
+	public int getCustomerId() {
+		return customerId;
+	}
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
+	
 	
 	
 }

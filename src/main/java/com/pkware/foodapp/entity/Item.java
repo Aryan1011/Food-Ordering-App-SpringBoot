@@ -1,11 +1,8 @@
 package com.pkware.foodapp.entity;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,22 +10,16 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class Item {
-
-	@Override
-	public String toString() {
-		return "Item [itemId=" + itemId + ", itemName=" + itemName + ", itemDesc=" + itemDesc + ", itemCost=" + itemCost
-				+ ", category=" + category + "]";
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int itemId;
 	@Column(nullable = false,unique = true)
 	private String itemName;
-	public Item() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	private String itemDesc;
+	private int itemCost;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	private Category category;
 
 	public Item(String itemName, String itemDesc, int itemCost, Category category) {
 		super();
@@ -38,11 +29,11 @@ public class Item {
 		this.category = category;
 	}
 
-	private String itemDesc;
-	private int itemCost;
-	
-	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	private Category category;
+	public Item() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getItemId() {
 		return itemId;
 	}
@@ -82,4 +73,7 @@ public class Item {
 	public void setCategory(Category category) {
 		this.category = category;
 	}
+	
+	
+	
 }

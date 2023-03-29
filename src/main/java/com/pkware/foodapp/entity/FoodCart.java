@@ -1,5 +1,6 @@
 package com.pkware.foodapp.entity;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -18,42 +19,63 @@ public class FoodCart {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int cartId;
 	
-
-	@OneToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<OrderItem> orderItems;
 	
-	public void addToList(OrderItem orderItem) {
-		List<OrderItem> a = this.getOrderItems();
-		a.add(orderItem);
-		this.setOrderItems(a);
-	}
-	
-	
-	public String getCustomerMail() {
-		return customerMail;
-	}
-
-
-	
-
 	public FoodCart() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
+	@OneToOne(cascade = CascadeType.ALL)
+	private Customer customer;
+	
+	private Date date;
+	
+	private int cost;
+	
+	private String customerMail;
 
-	public FoodCart(List<OrderItem> orderItems, String customerMail, Customer customer) {
-		super();
-		this.orderItems = orderItems;
-		this.customerMail = customerMail;
-		this.customer = customer;
+
+	public String getCustomerMail() {
+		return customerMail;
 	}
 
+	public void setCustomerMail(String customerMail) {
+		this.customerMail = customerMail;
+	}
 
-	@Override
-	public String toString() {
-		return "FoodCart [cartId=" + cartId + ", orderItems=" + orderItems + ", customerMail=" + customerMail
-				+ ", customer=" + customer + "]";
+	public FoodCart(List<OrderItem> orderItems, Customer customer, Date date, int cost, String customerMail) {
+		super();
+		this.orderItems = orderItems;
+		this.customer = customer;
+		this.date = date;
+		this.cost = cost;
+		this.customerMail = customerMail;
+	}
+
+	public int getCost() {
+		return cost;
+	}
+
+	public void setCost(int cost) {
+		this.cost = cost;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public int getCartId() {
+		return cartId;
+	}
+
+	public void setCartId(int cartId) {
+		this.cartId = cartId;
 	}
 
 
@@ -65,22 +87,6 @@ public class FoodCart {
 		this.orderItems = orderItems;
 	}
 
-	public void setCustomerMail(String customerMail) {
-		this.customerMail = customerMail;
-	}
-
-	private String customerMail;
-	
-	@OneToOne(fetch = FetchType.EAGER)
-	private Customer customer;
-
-	public int getCartId() {
-		return cartId;
-	}
-
-	public void setCartId(int cartId) {
-		this.cartId = cartId;
-	}
 	public Customer getCustomer() {
 		return customer;
 	}
@@ -89,7 +95,10 @@ public class FoodCart {
 		this.customer = customer;
 	}
 
-	
+	public List<OrderItem> addToList(OrderItem orderItem,List<OrderItem> orderItems ) {
+		orderItems.add(orderItem);
+		return orderItems;
+	}
 	
 	
 }

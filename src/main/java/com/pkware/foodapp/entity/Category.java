@@ -9,19 +9,20 @@ import javax.persistence.Id;
 @Entity
 public class Category {
 
-	public Category() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	public Category(String categoryName) {
-		super();
-		this.categoryName = categoryName;
-	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int categoryId;
 	@Column(nullable = false,unique = true)
 	private String categoryName;
+	
+	public Category(String categoryName) {
+		super();
+		this.categoryName = categoryName;
+	}
+	public Category() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	public int getCategoryId() {
 		return categoryId;
 	}

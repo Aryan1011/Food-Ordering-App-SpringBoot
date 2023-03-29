@@ -5,10 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pkware.foodapp.dao.CategoryDao;
 import com.pkware.foodapp.dao.CustomerDao;
-import com.pkware.foodapp.entity.Category;
 import com.pkware.foodapp.entity.Customer;
+import com.pkware.foodapp.requestObject.CustomerCreateReq;
 
 @Service
 public class CustomerService {
@@ -16,8 +15,8 @@ public class CustomerService {
 	@Autowired
 	CustomerDao customerDao;
 
-	public Customer addCategory(Customer customer) {
-		return customerDao.save(customer);
+	public Customer addCategory(CustomerCreateReq customerCreateReq) {
+		return customerDao.save(customerCreateReq);
 	}
 
 	public List<Customer> getAllCustomer() {
@@ -34,7 +33,7 @@ public class CustomerService {
 		return customer;
 	}
 
-	public Customer updateCustomer(Customer customer) {
+	public Customer updateCustomer(CustomerCreateReq customer) {
 		return customerDao.update(customer);
 	}
 

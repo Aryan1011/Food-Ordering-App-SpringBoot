@@ -1,5 +1,6 @@
 package com.pkware.foodapp.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -18,6 +19,7 @@ public class ItemDao {
 
 	 @Autowired
 	 private SessionFactory factory;
+	 
 	
 	public Item save(ItemRequest itemRequest) {
 		Session s=factory.openSession();
@@ -121,6 +123,30 @@ public class ItemDao {
 			s.close();
 		}
 		return item;
+	}
+
+	public List<Item> getByCategory(String id) {
+		Session s=factory.openSession();
+		Transaction tx=null;
+		List<Item> items = null;
+		try {
+			tx = s.beginTransaction();
+			List<Item> temp  = s.createQuery("from Item").list();
+			items = new ArrayList<>();
+			for(Item item:temp) {
+				if(item.getCategory().getCategoryName().equals(id)) {
+					items.add(item);
+				}
+			}
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			s.close();
+		}
+		return items;
 	}
 	
 }

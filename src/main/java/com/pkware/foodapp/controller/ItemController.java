@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pkware.foodapp.entity.Item;
+import com.pkware.foodapp.requestObject.CategoryRequest;
 import com.pkware.foodapp.requestObject.ItemRequest;
 import com.pkware.foodapp.services.ItemService;
 
@@ -51,6 +52,12 @@ public class ItemController {
 	@DeleteMapping({"/delete/{id}"})
 	public Item deleteItem(@PathVariable String id) {
 		return this.itemService.deleteItem((int) Integer.parseInt(id));
+	}
+	
+//	Get items by category name 
+	@PostMapping({"/getbycategory"})
+	public List<Item> getByCategory(@RequestBody CategoryRequest categoryRequest){
+		return this.itemService.getByCategory(categoryRequest.getCategoryName());
 	}
 	
 	

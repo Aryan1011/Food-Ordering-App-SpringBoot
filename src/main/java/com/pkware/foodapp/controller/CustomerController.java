@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.pkware.foodapp.entity.Customer;
+import com.pkware.foodapp.requestObject.CategoryRequest;
+import com.pkware.foodapp.requestObject.CustomerCreateReq;
+import com.pkware.foodapp.requestObject.CustomerMail;
 import com.pkware.foodapp.services.CustomerService;
 
 @RestController
@@ -28,8 +31,8 @@ public class CustomerController {
 
 //	add customer by customer object (id is not used) 
 	@PostMapping({"/add"})
-	public Customer addCustomer(@RequestBody Customer customer) {
-		return this.customerService.addCategory(customer);
+	public Customer addCustomer(@RequestBody CustomerCreateReq customerCreateReq) {
+		return this.customerService.addCategory(customerCreateReq);
 	}
 	
 //	gets all customer
@@ -52,15 +55,16 @@ public class CustomerController {
 	
 //	updates customer by id
 	@PutMapping({"/update"})
-	public Customer updateCustomer(@RequestBody Customer customer) {
-		return this.customerService.updateCustomer(customer);
+	public Customer updateCustomer(@RequestBody CustomerCreateReq customerCreateReq) {
+		return this.customerService.updateCustomer(customerCreateReq);
 	
 	}
 	
 //	find by customer mail 
-	@GetMapping("/getbymail/{mail}")
-	public Customer getByMail(@PathVariable String mail) {
-		return this.customerService.getByMail(mail);
+	@PostMapping("/getbymail")
+	public Customer getByMail(@RequestBody CustomerMail customerMail) {
+		return this.customerService.getByMail(customerMail.getCustomerMail());
 	}
+	
 
 }

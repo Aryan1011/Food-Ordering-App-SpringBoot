@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.pkware.foodapp.entity.Customer;
+import com.pkware.foodapp.requestObject.CustomerCreateReq;
 
 @Repository
 public class CustomerDao {
@@ -18,11 +19,13 @@ public class CustomerDao {
 	@Autowired
 	private SessionFactory factory;
 	
-	public Customer save(Customer customer) {
+	public Customer save(CustomerCreateReq customerCreateReq) {
 		Session s=factory.openSession();
 		Transaction tx=null;
+		Customer customer=null;
 		try {
 			tx=s.beginTransaction();
+			customer=new Customer(customerCreateReq.getCustomerName(),customerCreateReq.getCustomerPhone(),customerCreateReq.getCustomerAddress(),customerCreateReq.getCustomerMail());
 			s.save(customer);
 			tx.commit();
 		}
@@ -92,17 +95,17 @@ public class CustomerDao {
 		}
 	}
 
-	public Customer update(Customer customer) {
+	public Customer update(CustomerCreateReq customerCreateReq) {
 		Session session = factory.openSession();
 		Transaction tx = null;
-		int id=customer.getCustomerId();
+		Customer c=null;
 		try {
 			tx = session.beginTransaction();
-			Customer c = this.findById(id);
-			c.setCustomerAddress(customer.getCustomerAddress());
-			c.setCustomerMail(customer.getCustomerMail());
-			c.setCustomerName(customer.getCustomerName());
-			c.setCustomerPhone(customer.getCustomerPhone());
+			c = this.getByMail(customerCreateReq.getCustomerMail());
+			c.setCustomerAddress(customerCreateReq.getCustomerAddress());
+			c.setCustomerMail(customerCreateReq.getCustomerMail());
+			c.setCustomerName(customerCreateReq.getCustomerName());
+			c.setCustomerPhone(customerCreateReq.getCustomerPhone());
 			
 			session.update(c);
 			tx.commit();
@@ -113,7 +116,7 @@ public class CustomerDao {
 		} finally {
 			session.close();
 		}
-		return customer;
+		return c;
 	}
 
 	public Customer getByMail(String mail) {
@@ -135,5 +138,7 @@ public class CustomerDao {
 		}
 		return customer;
 	}
+	
+
 
 }

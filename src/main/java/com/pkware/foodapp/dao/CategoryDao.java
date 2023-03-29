@@ -19,13 +19,13 @@ public class CategoryDao{
 	private SessionFactory factory;
 	 
 	 
-	public Category save(Category category) {
+	public Category save(String category) {
 		Session s=factory.openSession();
 		Transaction tx=null;
 		Category c=null;
 		try {
 			tx=s.beginTransaction();
-			c=new Category(category.getCategoryName());
+			c=new Category(category);
 			s.save(c);
 			tx.commit();
 		}

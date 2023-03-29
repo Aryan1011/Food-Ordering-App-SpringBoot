@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pkware.foodapp.entity.Category;
+import com.pkware.foodapp.requestObject.CategoryRequest;
 import com.pkware.foodapp.services.CategoryService;
 
 @RestController
@@ -28,10 +29,10 @@ public class CategoryController {
 	}
 	
 	
-	//saves by sending id(not used) and category Name
+	//saves by sending category Name
 	@PostMapping({"/add"})
-	public Category addCategory(@RequestBody Category category) {
-		return this.categoryService.addCategory(category);
+	public Category addCategory(@RequestBody CategoryRequest categoryRequest) {
+		return this.categoryService.addCategory(categoryRequest.getCategoryName());
 	}
 	
 	// get all categories
@@ -53,6 +54,7 @@ public class CategoryController {
 	}
 	
 //	Send full object to change category name 
+//	Not to be used in the application
 	@PutMapping({"/update"})
 	public Category updateCategory(@RequestBody Category category) {
 		return this.categoryService.updateCategory(category);

@@ -14,7 +14,7 @@ public class CategoryService {
 	@Autowired
 	CategoryDao categoryDao;
 
-	public Category addCategory(Category category) {
+	public Category addCategory(String category) {
 		return categoryDao.save(category);
 	}
 
