@@ -2,6 +2,7 @@ package com.pkware.foodapp.controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,7 @@ public class FoodcartController {
 	
 	
 	//cart from cart id 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping({"/getcart/{id}"})
 	public FoodCart getFoodcart(@PathVariable String id) {
 		return this.foodcartService.getFoodcart(Integer.parseInt(id));
@@ -30,12 +32,14 @@ public class FoodcartController {
 	
 //	carts from customer id
 //	Not using in application
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping({"/getcustomercarts/{id}"})
 	public List< FoodCart> getCustomerFoodcarts(@PathVariable String id) {
 		return this.foodcartService.getCustomerFoodcarts(Integer.parseInt(id));
 	}
 	
 //	Make a Cart 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping({"/makecart"})
 	public FoodCart makeFoodCart(@RequestBody CartCreateRequest cartCreateRequest) {
 		return this.foodcartService.makeFoodCart(cartCreateRequest);

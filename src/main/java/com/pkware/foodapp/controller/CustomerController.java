@@ -3,6 +3,7 @@ package com.pkware.foodapp.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,36 +25,42 @@ public class CustomerController {
 	@Autowired
 	CustomerService customerService;
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping({"/test"})
 	public String test() {
 		return "Working Customer";
 	}
 
 //	add customer by customer object (id is not used) 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping({"/add"})
 	public Customer addCustomer(@RequestBody CustomerCreateReq customerCreateReq) {
 		return this.customerService.addCategory(customerCreateReq);
 	}
 	
 //	gets all customer
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping({"/get"})
 	public List<Customer> getAllCustomer(){
 		return this.customerService.getAllCustomer();
 	}
 	
 //	gets customer by his id 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping({"/get/{id}"})
 	public Customer getCustomer(@PathVariable String id) {
 		return this.customerService.getCustomer(Integer.parseInt(id));
 	}
 	
 //	delete by id
+	@CrossOrigin(origins = "http://localhost:4200")
 	@DeleteMapping({"/delete/{id}"})
 	public Customer deleteCustomer(@PathVariable String id) {
 		return this.customerService.deleteCustomer(Integer.parseInt(id));
 	}
 	
 //	updates customer by id
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping({"/update"})
 	public Customer updateCustomer(@RequestBody CustomerCreateReq customerCreateReq) {
 		return this.customerService.updateCustomer(customerCreateReq);
@@ -61,6 +68,7 @@ public class CustomerController {
 	}
 	
 //	find by customer mail 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/getbymail")
 	public Customer getByMail(@RequestBody CustomerMail customerMail) {
 		return this.customerService.getByMail(customerMail.getCustomerMail());
