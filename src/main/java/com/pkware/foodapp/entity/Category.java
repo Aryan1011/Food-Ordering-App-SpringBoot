@@ -14,10 +14,18 @@ public class Category {
 	private int categoryId;
 	@Column(nullable = false,unique = true)
 	private String categoryName;
+	private String categoryStatus;
 	
-	public Category(String categoryName) {
+	public Category(String categoryName, String categoryStatus) {
 		super();
 		this.categoryName = categoryName;
+		this.categoryStatus = categoryStatus;
+	}
+	public String getCategoryStatus() {
+		return categoryStatus;
+	}
+	public void setCategoryStatus(String categoryStatus) {
+		this.categoryStatus = categoryStatus;
 	}
 	public Category() {
 		super();

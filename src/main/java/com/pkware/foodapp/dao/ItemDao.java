@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import com.pkware.foodapp.entity.Category;
 import com.pkware.foodapp.entity.Item;
 import com.pkware.foodapp.requestObject.ItemRequest;
+import com.pkware.foodapp.response.View;
 
 @Repository
 public class ItemDao {
@@ -20,6 +21,8 @@ public class ItemDao {
 	 @Autowired
 	 private SessionFactory factory;
 	 
+	 @Autowired
+	 private CategoryDao categoryDao;
 	
 	public Item save(ItemRequest itemRequest) {
 		Session s=factory.openSession();
@@ -31,7 +34,7 @@ public class ItemDao {
 			Query q= s.createQuery(query);
 			q.setParameter("x", itemRequest.getItemCategory());
 			Category category= (Category) q.getSingleResult();
-			item = new Item(itemRequest.getItemName(),itemRequest.getItemDesc(),itemRequest.getItemCost(),category);
+			item = new Item(itemRequest.getItemName(),itemRequest.getItemDesc(),itemRequest.getItemCost(),"Active",category);
 			s.saveOrUpdate(item);
 			tx.commit();
 		}
@@ -87,9 +90,9 @@ public class ItemDao {
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
-			Query query=session.createQuery("delete from Item where itemId=:x");
-			query.setParameter("x", integer);
-			query.executeUpdate();
+			Item item = this.findById(integer);
+			item.setItemStatus("Inactive");
+			session.update(item);
 			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)
@@ -131,7 +134,9 @@ public class ItemDao {
 		List<Item> items = null;
 		try {
 			tx = s.beginTransaction();
-			List<Item> temp  = s.createQuery("from Item").list();
+			Query q = s.createQuery("from Item where itemStatus=:x");
+			q.setParameter("x", "Active");
+			List<Item> temp=q.list();
 			items = new ArrayList<>();
 			for(Item item:temp) {
 				if(item.getCategory().getCategoryName().equals(id)) {
@@ -147,6 +152,31 @@ public class ItemDao {
 			s.close();
 		}
 		return items;
+	}
+
+	public List<View> getByView() {
+		Session s=factory.openSession();
+		Transaction tx=null;
+		List<View> views=new ArrayList<>();
+		try {
+			tx=s.beginTransaction();
+			List<Category> categories = categoryDao.findAll();
+			for(Category c : categories) {
+				List<Item> items = this.getByCategory(c.getCategoryName());
+				View v = new View(c.getCategoryId(), c.getCategoryName(), items);
+				views.add(v);
+			}
+			tx.commit();
+		}
+		catch(Exception e) {
+			if(tx!=null)
+				tx.rollback();
+			e.printStackTrace();
+		}
+		finally {
+			s.close();
+		}
+		return views;
 	}
 	
 }

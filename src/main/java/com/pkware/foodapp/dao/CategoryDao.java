@@ -25,7 +25,7 @@ public class CategoryDao{
 		Category c=null;
 		try {
 			tx=s.beginTransaction();
-			c=new Category(category);
+			c=new Category(category, "Active");
 			s.save(c);
 			tx.commit();
 		}
@@ -46,7 +46,9 @@ public class CategoryDao{
 		List<Category> categories = null;
 		try {
 			tx = s.beginTransaction();
-			categories = s.createQuery("from Category").list();
+			Query q= s.createQuery("from Category where categoryStatus=:x");
+			q.setParameter("x", "Active");
+			categories=q.list();
 			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)
@@ -84,9 +86,9 @@ public class CategoryDao{
 		Category category=null;
 		try {
 			tx = session.beginTransaction();
-			Query query=session.createQuery("delete from Category where categoryName=:x");
-			query.setParameter("x", c);
-			query.executeUpdate();
+			category= this.findById(c);
+			category.setCategoryStatus("Inactive");
+			session.update(category);
 			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)
@@ -97,6 +99,7 @@ public class CategoryDao{
 		}
 	}
 
+//	Not Used
 	public Category update(Category category) {
 		Session session = factory.openSession();
 		Transaction tx = null;

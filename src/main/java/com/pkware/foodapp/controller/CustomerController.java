@@ -16,6 +16,7 @@ import com.pkware.foodapp.entity.Customer;
 import com.pkware.foodapp.requestObject.CategoryRequest;
 import com.pkware.foodapp.requestObject.CustomerCreateReq;
 import com.pkware.foodapp.requestObject.CustomerMail;
+import com.pkware.foodapp.requestObject.LoginRequest;
 import com.pkware.foodapp.services.CustomerService;
 
 @RestController
@@ -72,6 +73,14 @@ public class CustomerController {
 	@PostMapping("/getbymail")
 	public Customer getByMail(@RequestBody CustomerMail customerMail) {
 		return this.customerService.getByMail(customerMail.getCustomerMail());
+	}
+	
+	
+//	login request
+	@CrossOrigin(origins = "http://localhost:4200")
+	@PostMapping("/login")
+	public Customer login(@RequestBody LoginRequest loginRequest) {
+		return this.customerService.login(loginRequest);
 	}
 	
 

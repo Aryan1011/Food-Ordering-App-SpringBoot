@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.pkware.foodapp.dao.CustomerDao;
 import com.pkware.foodapp.entity.Customer;
 import com.pkware.foodapp.requestObject.CustomerCreateReq;
+import com.pkware.foodapp.requestObject.LoginRequest;
 
 @Service
 public class CustomerService {
@@ -39,6 +40,10 @@ public class CustomerService {
 
 	public Customer getByMail(String mail) {
 		return customerDao.getByMail(mail);
+	}
+
+	public Customer login(LoginRequest loginRequest) {
+		return customerDao.login(loginRequest);
 	}
 
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.pkware.foodapp.dao.ItemDao;
 import com.pkware.foodapp.entity.Item;
 import com.pkware.foodapp.requestObject.ItemRequest;
+import com.pkware.foodapp.response.View;
 
 @Service
 public class ItemService {
@@ -40,6 +41,10 @@ public class ItemService {
 
 	public List<Item> getByCategory(String id) {
 		return itemDao.getByCategory(id);
+	}
+
+	public List<View> getByView() {
+		return itemDao.getByView();
 	}
 
 }

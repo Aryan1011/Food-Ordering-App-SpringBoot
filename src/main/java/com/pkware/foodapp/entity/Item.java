@@ -17,15 +17,26 @@ public class Item {
 	private String itemName;
 	private String itemDesc;
 	private int itemCost;
+	private String itemStatus;
 	
+	public String getItemStatus() {
+		return itemStatus;
+	}
+
+	public void setItemStatus(String itemStatus) {
+		this.itemStatus = itemStatus;
+	}
+
 	@OneToOne(cascade = CascadeType.ALL)
 	private Category category;
 
-	public Item(String itemName, String itemDesc, int itemCost, Category category) {
+	
+	public Item(String itemName, String itemDesc, int itemCost, String itemStatus, Category category) {
 		super();
 		this.itemName = itemName;
 		this.itemDesc = itemDesc;
 		this.itemCost = itemCost;
+		this.itemStatus = itemStatus;
 		this.category = category;
 	}
 

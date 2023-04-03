@@ -91,7 +91,7 @@ public class FoodcartDao {
 			List<ItemPair> itempairs = cartCreateRequest.getCartItems();
 			for(ItemPair itemPair: itempairs) {
 				Item item=itemDao.findById(itemPair.getItemId());
-				OrderItem orderItem=new OrderItem(itemPair.getItemQuantity(), item);
+				OrderItem orderItem=new OrderItem(item.getItemName(),itemPair.getItemQuantity(), item);
 				orderItem=orderItemDao.save(orderItem);
 				orderItem.getOrderItemId();
 				orderItems.add(orderItem);

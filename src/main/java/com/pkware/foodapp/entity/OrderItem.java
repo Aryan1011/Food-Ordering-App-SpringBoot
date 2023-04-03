@@ -17,11 +17,20 @@ public class OrderItem {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int orderItemId;
+	private String itemName;  
+	public String getItemName() {
+		return itemName;
+	}
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
 	private int quantity;
 	@OneToOne
 	private Item item;
-	public OrderItem(int quantity, Item item) {
+	
+	public OrderItem(String itemName, int quantity, Item item) {
 		super();
+		this.itemName = itemName;
 		this.quantity = quantity;
 		this.item = item;
 	}

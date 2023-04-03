@@ -99,7 +99,7 @@ public class OrderDao {
 			int total = foodCart.getCost();
 			String comment = foodCart.getCustomerMail() + " Ordered "+it +"Worth Ruppees - " + total;
 			Customer cus=customerDao.getByMail(foodCart.getCustomerMail());
-			details = new OrderDetails(comment,new Date(),foodCart,"Paid",foodCart.getCustomerMail());
+			details = new OrderDetails(comment,new Date(),foodCart,"Pending",foodCart.getCustomerMail());
 			session.save(details);
 			tx.commit();
 		}
@@ -145,6 +145,30 @@ public class OrderDao {
 			tx=session.beginTransaction();
 			Query q = session.createQuery("from OrderDetails where status=:x");
 			q.setParameter("x", id);
+			details=q.list();
+			tx.commit();
+		}
+		catch(Exception e) {
+			if(tx!=null)
+				tx.rollback();
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return details;
+	}
+
+
+
+	public List<OrderDetails> findAll() {
+		Session session = null;
+		Transaction tx=null;
+		List<OrderDetails> details=null;
+		try {
+			session = factory.openSession();
+			tx=session.beginTransaction();
+			Query q = session.createQuery("from OrderDetails");
 			details=q.list();
 			tx.commit();
 		}

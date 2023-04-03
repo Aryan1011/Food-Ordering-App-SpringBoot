@@ -5,6 +5,13 @@ public class CustomerCreateReq {
 	private String customerMail;
 	private String customerAddress;
 	private String customerPhone;
+	private String customerPassword;
+	public String getCustomerPassword() {
+		return customerPassword;
+	}
+	public void setCustomerPassword(String customerPassword) {
+		this.customerPassword = customerPassword;
+	}
 	public String getCustomerName() {
 		return customerName;
 	}
@@ -29,14 +36,7 @@ public class CustomerCreateReq {
 	public void setCustomerPhone(String customerPhone) {
 		this.customerPhone = customerPhone;
 	}
-	public CustomerCreateReq(String customerName, String customerMail, String customerAddress,
-			String customerPhone) {
-		super();
-		this.customerName = customerName;
-		this.customerMail = customerMail;
-		this.customerAddress = customerAddress;
-		this.customerPhone = customerPhone;
-	}
+	
 	public CustomerCreateReq() {
 		super();
 		// TODO Auto-generated constructor stub

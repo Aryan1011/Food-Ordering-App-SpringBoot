@@ -41,4 +41,9 @@ public class OrderService {
 		return orderDao.getAllFromStatus(id);
 	}
 
+
+	public List<OrderDetails> getAll() {
+		return orderDao.findAll();
+	}
+
 }

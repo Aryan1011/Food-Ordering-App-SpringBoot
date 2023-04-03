@@ -18,6 +18,7 @@ public class Customer {
 	private String customerAddress;
 	@Column(nullable = false,unique = true)
 	private String customerMail;
+	private String customerPassword;
 	public String getCustomerName() {
 		return customerName;
 	}
@@ -46,12 +47,21 @@ public class Customer {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Customer(String customerName, String customerPhone, String customerAddress, String customerMail) {
+	
+	public String getCustomerPassword() {
+		return customerPassword;
+	}
+	public void setCustomerPassword(String customerPassword) {
+		this.customerPassword = customerPassword;
+	}
+	public Customer(String customerName, String customerPhone, String customerAddress, String customerMail,
+			String customerPassword) {
 		super();
 		this.customerName = customerName;
 		this.customerPhone = customerPhone;
 		this.customerAddress = customerAddress;
 		this.customerMail = customerMail;
+		this.customerPassword = customerPassword;
 	}
 	public int getCustomerId() {
 		return customerId;

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pkware.foodapp.entity.Item;
 import com.pkware.foodapp.requestObject.CategoryRequest;
 import com.pkware.foodapp.requestObject.ItemRequest;
+import com.pkware.foodapp.response.View;
 import com.pkware.foodapp.services.ItemService;
 
 @RestController
@@ -63,10 +64,17 @@ public class ItemController {
 	}
 	
 //	Get items by category name 
-	@CrossOrigin(origins = "http://localhost:4200", methods = RequestMethod.GET)
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping({"/getbycategory"})
 	public List<Item> getByCategory(@RequestParam String id){
 		return this.itemService.getByCategory(id);
+	}
+	
+//  get by view required
+	@CrossOrigin(origins = "http://localhost:4200")
+	@GetMapping({"/getbyview"})
+	public List<View> getByView(){
+		return this.itemService.getByView();
 	}
 	
 	

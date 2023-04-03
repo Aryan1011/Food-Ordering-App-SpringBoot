@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.pkware.foodapp.entity.Customer;
 import com.pkware.foodapp.requestObject.CustomerCreateReq;
+import com.pkware.foodapp.requestObject.LoginRequest;
 
 @Repository
 public class CustomerDao {
@@ -25,7 +26,7 @@ public class CustomerDao {
 		Customer customer=null;
 		try {
 			tx=s.beginTransaction();
-			customer=new Customer(customerCreateReq.getCustomerName(),customerCreateReq.getCustomerPhone(),customerCreateReq.getCustomerAddress(),customerCreateReq.getCustomerMail());
+			customer=new Customer(customerCreateReq.getCustomerName(),customerCreateReq.getCustomerPhone(),customerCreateReq.getCustomerAddress(),customerCreateReq.getCustomerMail(),customerCreateReq.getCustomerPassword());
 			s.save(customer);
 			tx.commit();
 		}
@@ -128,6 +129,28 @@ public class CustomerDao {
 			Query query=session.createQuery("from Customer where customerMail=:x");
 			query.setParameter("x", mail);
 			customer=(Customer) query.uniqueResult();
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return customer;
+	}
+
+	public Customer login(LoginRequest loginRequest) {
+		Session session = factory.openSession();
+		Transaction tx = null;
+		Customer customer=null;
+		try {
+			tx = session.beginTransaction();
+			
+			customer = this.getByMail(loginRequest.getEmail());
+			if(customer!=null && !customer.getCustomerPassword().equals(loginRequest.getPassword())) {
+				customer=null;
+			}
 			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)
