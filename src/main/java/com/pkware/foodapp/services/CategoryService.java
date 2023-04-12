@@ -37,4 +37,8 @@ public class CategoryService {
 		return categoryDao.update(category);
 	}
 
+	public List<Category> getTrueCategory() {
+		return categoryDao.getTrue();
+	}
+
 }

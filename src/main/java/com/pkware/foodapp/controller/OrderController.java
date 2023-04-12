@@ -62,4 +62,10 @@ public class OrderController {
 	public List<OrderDetails> getAll(){
 		return this.orderService.getAll();
 	}
+	
+	@CrossOrigin(origins = "http://localhost:4200")
+	@GetMapping({"/getbydate/{id}"})
+	public List<OrderDetails> getByDate(@PathVariable String id){
+		return this.orderService.getByDate(id);
+	}
 }

@@ -1,5 +1,8 @@
 package com.pkware.foodapp.dao;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,7 +43,7 @@ public class OrderDao {
 			session = factory.openSession();
 			tx=session.beginTransaction();
 			Customer customer=customerDao.findById(customerId);
-			Query q = session.createQuery("from OrderDetails where customerMail=:x");
+			Query q = session.createQuery("from OrderDetails where customerMail=:x order by orderDate desc");
 			q.setParameter("x", customer.getCustomerMail());
 			details= q.list();
 			tx.commit();
@@ -143,7 +146,7 @@ public class OrderDao {
 		try {
 			session = factory.openSession();
 			tx=session.beginTransaction();
-			Query q = session.createQuery("from OrderDetails where status=:x");
+			Query q = session.createQuery("from OrderDetails where status=:x order by orderDate");
 			q.setParameter("x", id);
 			details=q.list();
 			tx.commit();
@@ -181,5 +184,38 @@ public class OrderDao {
 			session.close();
 		}
 		return details;
+	}
+
+
+
+	public List<OrderDetails> getBydate(String id) {
+		Session session = null;
+		Transaction tx=null;
+		List<OrderDetails> details=null;
+		List<OrderDetails> ret=new ArrayList<>();
+		try {
+			session = factory.openSession();
+			tx=session.beginTransaction();
+			Query q = session.createQuery("from OrderDetails where status=:x order by orderDate desc");
+			q.setParameter("x", "Picked");
+			details=q.list();
+			for(OrderDetails order:details) {
+				SimpleDateFormat fmt=new SimpleDateFormat("yyyy-MM-dd");
+				String s=fmt.format(order.getOrderDate());
+				if(s.equals(id)) {
+					ret.add(order);
+				}
+			}
+			tx.commit();
+		}
+		catch(Exception e) {
+			if(tx!=null)
+				tx.rollback();
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return ret;
 	}
 }

@@ -14,17 +14,17 @@ public class Category {
 	private int categoryId;
 	@Column(nullable = false,unique = true)
 	private String categoryName;
-	private String categoryStatus;
+	private boolean categoryStatus;
 	
-	public Category(String categoryName, String categoryStatus) {
+	public Category(String categoryName, boolean categoryStatus) {
 		super();
 		this.categoryName = categoryName;
 		this.categoryStatus = categoryStatus;
 	}
-	public String getCategoryStatus() {
+	public boolean getCategoryStatus() {
 		return categoryStatus;
 	}
-	public void setCategoryStatus(String categoryStatus) {
+	public void setCategoryStatus(boolean categoryStatus) {
 		this.categoryStatus = categoryStatus;
 	}
 	public Category() {

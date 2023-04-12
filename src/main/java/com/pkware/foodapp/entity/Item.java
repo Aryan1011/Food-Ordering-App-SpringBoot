@@ -10,6 +10,14 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class Item {
+	public String getItemImage() {
+		return itemImage;
+	}
+
+	public void setItemImage(String itemImage) {
+		this.itemImage = itemImage;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int itemId;
@@ -17,26 +25,30 @@ public class Item {
 	private String itemName;
 	private String itemDesc;
 	private int itemCost;
-	private String itemStatus;
+	private boolean itemStatus;
+	private String itemImage;
 	
-	public String getItemStatus() {
+	public boolean getItemStatus() {
 		return itemStatus;
 	}
 
-	public void setItemStatus(String itemStatus) {
+	public void setItemStatus(boolean itemStatus) {
 		this.itemStatus = itemStatus;
 	}
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private Category category;
 
-	
-	public Item(String itemName, String itemDesc, int itemCost, String itemStatus, Category category) {
+
+
+	public Item(String itemName, String itemDesc, int itemCost, boolean itemStatus, String itemImage,
+			Category category) {
 		super();
 		this.itemName = itemName;
 		this.itemDesc = itemDesc;
 		this.itemCost = itemCost;
 		this.itemStatus = itemStatus;
+		this.itemImage = itemImage;
 		this.category = category;
 	}
 

@@ -56,6 +56,15 @@ public class ItemController {
 		return this.itemService.getAllItem();
 	}
 	
+	
+//	get true for customers
+	@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+	@GetMapping({"/getbycategorytrue"})
+	public List<Item> getTrueItem(@RequestParam String id) {
+		return this.itemService.getTrueItemByCategory(id);
+	}
+	
+	
 //	delete by item id
 	@CrossOrigin(origins = "http://localhost:4200")
 	@DeleteMapping({"/delete/{id}"})

@@ -34,7 +34,8 @@ public class ItemDao {
 			Query q= s.createQuery(query);
 			q.setParameter("x", itemRequest.getItemCategory());
 			Category category= (Category) q.getSingleResult();
-			item = new Item(itemRequest.getItemName(),itemRequest.getItemDesc(),itemRequest.getItemCost(),"Active",category);
+			String path = "../../../assets/Images/dishes/"+itemRequest.getItemImage();
+			item = new Item(itemRequest.getItemName(),itemRequest.getItemDesc(),itemRequest.getItemCost(),true,path, category);
 			s.saveOrUpdate(item);
 			tx.commit();
 		}
@@ -85,13 +86,14 @@ public class ItemDao {
 		return items;
 	}
 
-	public void deleteById(Integer integer) {
+	public Item deleteById(Integer integer) {
 		Session session = factory.openSession();
 		Transaction tx = null;
+		Item item=null;
 		try {
 			tx = session.beginTransaction();
-			Item item = this.findById(integer);
-			item.setItemStatus("Inactive");
+			item = this.findById(integer);
+			item.setItemStatus(!item.getItemStatus());
 			session.update(item);
 			tx.commit();
 		} catch (HibernateException e) {
@@ -101,6 +103,7 @@ public class ItemDao {
 		} finally {
 			session.close();
 		}
+		return item;
 	}
 
 	public Item update(ItemRequest itemRequest) {
@@ -134,8 +137,7 @@ public class ItemDao {
 		List<Item> items = null;
 		try {
 			tx = s.beginTransaction();
-			Query q = s.createQuery("from Item where itemStatus=:x");
-			q.setParameter("x", "Active");
+			Query q = s.createQuery("from Item");
 			List<Item> temp=q.list();
 			items = new ArrayList<>();
 			for(Item item:temp) {
@@ -177,6 +179,34 @@ public class ItemDao {
 			s.close();
 		}
 		return views;
+	}
+
+
+
+	public List<Item> getTrueItemByCategory(String id) {
+		Session s=factory.openSession();
+		Transaction tx=null;
+		List<Item> items = null;
+		try {
+			tx = s.beginTransaction();
+			Query q = s.createQuery("from Item where itemStatus=:x");
+			q.setParameter("x", true);
+			List<Item> temp=q.list();
+			items = new ArrayList<>();
+			for(Item item:temp) {
+				if(item.getCategory().getCategoryName().equals(id)) {
+					items.add(item);
+				}
+			}
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			s.close();
+		}
+		return items;
 	}
 	
 }

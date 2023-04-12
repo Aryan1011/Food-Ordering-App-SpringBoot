@@ -34,9 +34,9 @@ public class ItemService {
 	}
 
 	public Item deleteItem(int parseInt) {
-		Item item = itemDao.findById(parseInt);
-		itemDao.deleteById(parseInt);
-		return item;
+		
+		return itemDao.deleteById(parseInt);
+		
 	}
 
 	public List<Item> getByCategory(String id) {
@@ -45,6 +45,11 @@ public class ItemService {
 
 	public List<View> getByView() {
 		return itemDao.getByView();
+	}
+
+
+	public List<Item> getTrueItemByCategory(String id) {
+		return itemDao.getTrueItemByCategory(id);
 	}
 
 }

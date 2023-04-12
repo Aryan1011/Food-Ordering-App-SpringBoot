@@ -46,4 +46,9 @@ public class OrderService {
 		return orderDao.findAll();
 	}
 
+
+	public List<OrderDetails> getByDate(String id) {
+		return orderDao.getBydate(id);
+	}
+
 }

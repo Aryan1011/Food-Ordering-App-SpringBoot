@@ -2,10 +2,17 @@ package com.pkware.foodapp.requestObject;
 
 public class ItemRequest {
 	
+	public String getItemImage() {
+		return itemImage;
+	}
+	public void setItemImage(String itemImage) {
+		this.itemImage = itemImage;
+	}
 	private String itemName;
 	private String itemDesc;
 	private int itemCost;
 	private String itemCategory;
+	private String itemImage;
 	public String getItemName() {
 		return itemName;
 	}

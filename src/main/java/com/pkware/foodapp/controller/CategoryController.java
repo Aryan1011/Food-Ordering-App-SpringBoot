@@ -44,6 +44,13 @@ public class CategoryController {
 		return this.categoryService.getAllCategory();
 	}
 	
+//	get true only for user
+	@CrossOrigin(origins = "http://localhost:4200")
+	@GetMapping({"/gettrue"})
+	public List<Category> getTrueCategory(){
+		return this.categoryService.getTrueCategory();
+	}
+	
 //	get full by passing category name
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping({"/get/{id}"})
