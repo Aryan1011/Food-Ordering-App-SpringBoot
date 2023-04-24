@@ -7,6 +7,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import com.pkware.foodapp.entity.Category;
@@ -19,12 +21,16 @@ public class CategoryDao{
 	private SessionFactory factory;
 	 
 	 
-	public Category save(String category) {
+	public ResponseEntity<Category> save(String category) {
 		Session s=factory.openSession();
 		Transaction tx=null;
 		Category c=null;
 		try {
 			tx=s.beginTransaction();
+			Category cat = this.findById(category);
+			if(cat!=null) {
+				return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+			}
 			c=new Category(category, true);
 			s.save(c);
 			tx.commit();
@@ -37,7 +43,7 @@ public class CategoryDao{
 		finally {
 			s.close();
 		}
-		return c;
+		return ResponseEntity.status(HttpStatus.CREATED).body(c);
 	}
 	
 	public List<Category> findAll(){

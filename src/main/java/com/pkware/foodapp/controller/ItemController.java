@@ -1,6 +1,8 @@
 package com.pkware.foodapp.controller;
 
 import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -31,7 +33,7 @@ public class ItemController {
 //	we send name, desc, cost and category name 
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping({"/add"})
-	public Item addItem(@RequestBody ItemRequest itemRequest) {
+	public ResponseEntity<Item> addItem(@RequestBody ItemRequest itemRequest) {
 		return this.itemService.addItem(itemRequest);
 	}
 	

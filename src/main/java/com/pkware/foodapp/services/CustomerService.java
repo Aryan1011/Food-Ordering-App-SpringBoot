@@ -3,6 +3,7 @@ package com.pkware.foodapp.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.pkware.foodapp.dao.CustomerDao;
@@ -16,7 +17,7 @@ public class CustomerService {
 	@Autowired
 	CustomerDao customerDao;
 
-	public Customer addCategory(CustomerCreateReq customerCreateReq) {
+	public ResponseEntity<Customer> addCategory(CustomerCreateReq customerCreateReq) {
 		return customerDao.save(customerCreateReq);
 	}
 

@@ -203,7 +203,6 @@ public class MetricsDao {
 					List<OrderItem> items= order.getFoodCart().getOrderItems();
 					for(OrderItem item:items) {
 						String cat= item.getItem().getCategory().getCategoryName();
-						System.out.println(cat);
 						if(mp.containsKey(cat)) {
 							mp.put(cat, mp.get(cat)+(item.getQuantity()*item.getItem().getItemCost()));
 						}

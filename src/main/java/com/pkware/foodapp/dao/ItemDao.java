@@ -8,6 +8,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import com.pkware.foodapp.entity.Category;
@@ -24,12 +26,20 @@ public class ItemDao {
 	 @Autowired
 	 private CategoryDao categoryDao;
 	
-	public Item save(ItemRequest itemRequest) {
+	public ResponseEntity<Item> save(ItemRequest itemRequest) {
 		Session s=factory.openSession();
 		Transaction tx=null;
 		Item item=null;
 		try {
 			tx=s.beginTransaction();
+			
+			Query get = s.createQuery("from Item where itemName=:x");
+			get.setParameter("x", itemRequest.getItemName());
+			Item i = (Item) get.getSingleResult();
+			if(i!=null) {
+				return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+			}
+			
 			String query = "from Category where categoryName=:x";
 			Query q= s.createQuery(query);
 			q.setParameter("x", itemRequest.getItemCategory());
@@ -47,7 +57,7 @@ public class ItemDao {
 		finally {
 			s.close();
 		}
-		return item;
+		return ResponseEntity.status(HttpStatus.CREATED).body(item);
 	}
 
 	public Item findById(Integer integer) {

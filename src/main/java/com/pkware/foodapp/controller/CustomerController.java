@@ -1,6 +1,8 @@
 package com.pkware.foodapp.controller;
 
 import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,7 +37,7 @@ public class CustomerController {
 //	add customer by customer object (id is not used) 
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping({"/add"})
-	public Customer addCustomer(@RequestBody CustomerCreateReq customerCreateReq) {
+	public ResponseEntity<Customer> addCustomer(@RequestBody CustomerCreateReq customerCreateReq) {
 		return this.customerService.addCategory(customerCreateReq);
 	}
 	

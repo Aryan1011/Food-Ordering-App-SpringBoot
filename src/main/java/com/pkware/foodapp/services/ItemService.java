@@ -3,6 +3,7 @@ package com.pkware.foodapp.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.pkware.foodapp.dao.ItemDao;
@@ -16,7 +17,7 @@ public class ItemService {
 	@Autowired
 	private ItemDao itemDao;
 	
-	public Item addItem(ItemRequest itemRequest) {
+	public ResponseEntity<Item> addItem(ItemRequest itemRequest) {
 		return itemDao.save(itemRequest);
 	}
 
