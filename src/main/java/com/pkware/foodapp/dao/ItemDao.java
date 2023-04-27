@@ -20,41 +20,42 @@ import com.pkware.foodapp.response.View;
 @Repository
 public class ItemDao {
 
-	 @Autowired
-	 private SessionFactory factory;
-	 
-	 @Autowired
-	 private CategoryDao categoryDao;
-	
+	@Autowired
+	private SessionFactory factory;
+
+	@Autowired
+	private CategoryDao categoryDao;
+
 	public ResponseEntity<Item> save(ItemRequest itemRequest) {
-		Session s=factory.openSession();
-		Transaction tx=null;
-		Item item=null;
+		Session s = factory.openSession();
+		Transaction tx = null;
+		Item item = null;
 		try {
-			tx=s.beginTransaction();
-			
-			Query get = s.createQuery("from Item where itemName=:x");
-			get.setParameter("x", itemRequest.getItemName());
-			Item i = (Item) get.getSingleResult();
-			if(i!=null) {
-				return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+			tx = s.beginTransaction();
+			try {
+				Query get = s.createQuery("from Item where itemName=:x");
+				get.setParameter("x", itemRequest.getItemName());
+				Item i = (Item) get.getSingleResult();
+				if (i != null) {
+					return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+				}
+			} catch (Exception e) {
+				System.out.println(e);
 			}
-			
 			String query = "from Category where categoryName=:x";
-			Query q= s.createQuery(query);
+			Query q = s.createQuery(query);
 			q.setParameter("x", itemRequest.getItemCategory());
-			Category category= (Category) q.getSingleResult();
-			String path = "../../../assets/Images/dishes/"+itemRequest.getItemImage();
-			item = new Item(itemRequest.getItemName(),itemRequest.getItemDesc(),itemRequest.getItemCost(),true,path, category);
+			Category category = (Category) q.getSingleResult();
+			String path = "../../../assets/Images/dishes/" + itemRequest.getItemImage();
+			item = new Item(itemRequest.getItemName(), itemRequest.getItemDesc(), itemRequest.getItemCost(), true, path,
+					category);
 			s.saveOrUpdate(item);
 			tx.commit();
-		}
-		catch(Exception e) {
-			if(tx!=null)
+		} catch (Exception e) {
+			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			s.close();
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).body(item);
@@ -63,7 +64,7 @@ public class ItemDao {
 	public Item findById(Integer integer) {
 		Session session = factory.openSession();
 		Transaction tx = null;
-		Item item=null;
+		Item item = null;
 		try {
 			tx = session.beginTransaction();
 			item = (Item) session.get(Item.class, integer);
@@ -79,8 +80,8 @@ public class ItemDao {
 	}
 
 	public List<Item> findAll() {
-		Session s=factory.openSession();
-		Transaction tx=null;
+		Session s = factory.openSession();
+		Transaction tx = null;
 		List<Item> items = null;
 		try {
 			tx = s.beginTransaction();
@@ -99,7 +100,7 @@ public class ItemDao {
 	public Item deleteById(Integer integer) {
 		Session session = factory.openSession();
 		Transaction tx = null;
-		Item item=null;
+		Item item = null;
 		try {
 			tx = session.beginTransaction();
 			item = this.findById(integer);
@@ -117,41 +118,39 @@ public class ItemDao {
 	}
 
 	public Item update(ItemRequest itemRequest) {
-		Session s=factory.openSession();
-		Transaction tx=null;
-		Item item=null;
+		Session s = factory.openSession();
+		Transaction tx = null;
+		Item item = null;
 		try {
-			tx=s.beginTransaction();
+			tx = s.beginTransaction();
 			String query = "from Item where itemName=:x";
-			Query q= s.createQuery(query);
+			Query q = s.createQuery(query);
 			q.setParameter("x", itemRequest.getItemName());
-			item=(Item) q.getSingleResult();
+			item = (Item) q.getSingleResult();
 			item.setItemCost(itemRequest.getItemCost());
 			item.setItemDesc(itemRequest.getItemDesc());
 			tx.commit();
-		}
-		catch(Exception e) {
-			if(tx!=null)
+		} catch (Exception e) {
+			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			s.close();
 		}
 		return item;
 	}
 
 	public List<Item> getByCategory(String id) {
-		Session s=factory.openSession();
-		Transaction tx=null;
+		Session s = factory.openSession();
+		Transaction tx = null;
 		List<Item> items = null;
 		try {
 			tx = s.beginTransaction();
 			Query q = s.createQuery("from Item");
-			List<Item> temp=q.list();
+			List<Item> temp = q.list();
 			items = new ArrayList<>();
-			for(Item item:temp) {
-				if(item.getCategory().getCategoryName().equals(id)) {
+			for (Item item : temp) {
+				if (item.getCategory().getCategoryName().equals(id)) {
 					items.add(item);
 				}
 			}
@@ -167,44 +166,40 @@ public class ItemDao {
 	}
 
 	public List<View> getByView() {
-		Session s=factory.openSession();
-		Transaction tx=null;
-		List<View> views=new ArrayList<>();
+		Session s = factory.openSession();
+		Transaction tx = null;
+		List<View> views = new ArrayList<>();
 		try {
-			tx=s.beginTransaction();
+			tx = s.beginTransaction();
 			List<Category> categories = categoryDao.findAll();
-			for(Category c : categories) {
+			for (Category c : categories) {
 				List<Item> items = this.getByCategory(c.getCategoryName());
 				View v = new View(c.getCategoryId(), c.getCategoryName(), items);
 				views.add(v);
 			}
 			tx.commit();
-		}
-		catch(Exception e) {
-			if(tx!=null)
+		} catch (Exception e) {
+			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			s.close();
 		}
 		return views;
 	}
 
-
-
 	public List<Item> getTrueItemByCategory(String id) {
-		Session s=factory.openSession();
-		Transaction tx=null;
+		Session s = factory.openSession();
+		Transaction tx = null;
 		List<Item> items = null;
 		try {
 			tx = s.beginTransaction();
 			Query q = s.createQuery("from Item where itemStatus=:x");
 			q.setParameter("x", true);
-			List<Item> temp=q.list();
+			List<Item> temp = q.list();
 			items = new ArrayList<>();
-			for(Item item:temp) {
-				if(item.getCategory().getCategoryName().equals(id)) {
+			for (Item item : temp) {
+				if (item.getCategory().getCategoryName().equals(id)) {
 					items.add(item);
 				}
 			}
@@ -218,5 +213,5 @@ public class ItemDao {
 		}
 		return items;
 	}
-	
+
 }

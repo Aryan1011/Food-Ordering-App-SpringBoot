@@ -45,9 +45,15 @@ public class CustomerDao {
 		Customer customer=null;
 		try {
 			tx=s.beginTransaction();
+			try {
+				
 			Customer c = this.getByMail(customerCreateReq.getCustomerMail());
 			if(c!=null) {
 				return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+			}
+			}
+			catch(Exception e) {
+				System.out.println(e);
 			}
 			String hashedPassword = hashPassword(customerCreateReq.getCustomerPassword());
 			customer=new Customer(customerCreateReq.getCustomerName(),customerCreateReq.getCustomerPhone(),customerCreateReq.getCustomerAddress(),customerCreateReq.getCustomerMail(),hashedPassword);

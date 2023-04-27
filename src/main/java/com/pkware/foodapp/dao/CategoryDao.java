@@ -27,9 +27,14 @@ public class CategoryDao{
 		Category c=null;
 		try {
 			tx=s.beginTransaction();
-			Category cat = this.findById(category);
-			if(cat!=null) {
-				return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+			try {				
+				Category cat = this.findById(category);
+				if(cat!=null) {
+					return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+				}
+			}
+			catch(Exception e) {
+				e.printStackTrace();
 			}
 			c=new Category(category, true);
 			s.save(c);
